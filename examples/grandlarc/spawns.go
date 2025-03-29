@@ -1,6 +1,6 @@
 package main
 
-import "github.com/kodeyeen/omp"
+import "github.com/notfrancois/omp"
 
 type Spawn struct {
 	pos   omp.Vector3

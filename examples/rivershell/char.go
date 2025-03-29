@@ -3,7 +3,7 @@ package main
 import (
 	"time"
 
-	"github.com/kodeyeen/omp"
+	"github.com/notfrancois/omp"
 )
 
 type Character struct {

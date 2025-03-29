@@ -13,7 +13,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/kodeyeen/omp"
+	"github.com/notfrancois/omp"
 )
 
 const (

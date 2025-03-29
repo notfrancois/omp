@@ -1,4 +1,4 @@
-module github.com/kodeyeen/omp
+module github.com/notfrancois/omp
 
 go 1.22.3
 
