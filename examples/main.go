@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/kodeyeen/omp"
+	"github.com/notfrancois/omp"
 )
 
 // GOARCH=386 CGO_ENABLED=1 go build -buildmode=c-shared -o test.dll
