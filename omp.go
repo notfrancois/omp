@@ -621,9 +621,15 @@ func onPlayerSpawn(player unsafe.Pointer) C.bool {
 func onIncomingConnection(player unsafe.Pointer, ipAddress C.String, port C.ushort) C.bool {
 	defer handlePanic()
 
+	// Add validation to prevent invalid string length causing memory issues
+	ipLen := int(ipAddress.length)
+	if ipLen < 0 || ipLen > 45 { // Maximum IPv6 address length is 45 characters
+		ipLen = 0 // Reset to avoid memory allocation errors
+	}
+
 	evt := NewEvent(EventTypeIncomingConnection, &IncomingConnectionEvent{
 		Player:    &Player{handle: player},
-		IPAddress: C.GoStringN(ipAddress.buf, C.int(ipAddress.length)),
+		IPAddress: C.GoStringN(ipAddress.buf, C.int(ipLen)),
 		Port:      int(port),
 	})
 	err := EventListener().HandleEvent(context.Background(), evt)
