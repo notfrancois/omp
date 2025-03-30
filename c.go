@@ -5,6 +5,7 @@ package omp
 // #include "include/omp.h"
 import "C"
 import (
+	"strings"
 	"unicode/utf8"
 	"unsafe"
 )
@@ -17,21 +18,27 @@ func newCUchar(goBool bool) C.uchar {
 	return 0
 }
 
-func newCString(s string) *C.char {
-	// Validate the string is valid UTF-8
-	bs := []byte(s)
-	for len(bs) > 0 {
-		r, size := utf8.DecodeRune(bs)
-		if r == utf8.RuneError {
-			// Replace invalid characters with '?'
-			r = '?'
+func newCString(goStr string) C.String {
+	// Validate the UTF-8 string before conversion
+	if !utf8.ValidString(goStr) {
+		// Replace invalid sequences
+		var buf strings.Builder
+		for _, r := range goStr {
+			if r == utf8.RuneError {
+				buf.WriteRune('?')
+			} else {
+				buf.WriteRune(r)
+			}
 		}
-		bs = bs[size:]
+		goStr = buf.String()
 	}
 
-	// Convert the string to a C string while keeping UTF-8 characters
-	cstr := C.CString(s)
-	return cstr
+	cStr := C.CString(goStr)
+
+	return C.String{
+		buf:    cStr,
+		length: C.strlen(cStr),
+	}
 }
 
 func freeCString(cStr C.String) {
